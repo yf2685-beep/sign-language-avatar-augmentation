@@ -1,29 +1,59 @@
-<div  align="center">    
-<img src="./assets/overview.png" width = "650" alt="Team Overview" />
-</div>
+# Sign Language Avatar Augmentation
 
-# Introduction
-We are the TaoTian Meta Technology Team(**淘天Meta技术团队**), dedicated to advancing and applying 3D and XR technologies. Our work spans:
-- 3D object reconstruction
-- 3D human reconstruction, editing and animation 
-- Cross‑platform 3D rendering engines
-- On‑device AI inference engines([MNN](https://github.com/alibaba/MNN)) 
-- Comprehensive cross‑platform XR development solutions
+**面向手语合成数据研究的数字人动作处理与可视化工作流，基于 Taobao3D / HRM2Avatar。**
 
-We aim to deliver high‑performance, scalable solutions that enable next‑generation digital experiences.
+Research context: NYU Abu Dhabi AIR Lab, supervised by Yi Fang. The project explores how motion captured from real signing videos can be prepared for avatar replay, with the goal of creating more varied examples for sign-language recognition.
 
+This repository is a portfolio fork of [Alibaba Taobao3D](https://github.com/alibaba/Taobao3D). The avatar and rendering foundations belong to their original authors. The original project introduction and publication links are preserved in [UPSTREAM.md](UPSTREAM.md).
 
-# Publications
-📷 **3D Reconstruction**
-- Dens3R: A Foundation Model for 3D Geometry Prediction. [[Paper]](https://arxiv.org/abs/2507.16290) [[Project Page]](https://g-1nonly.github.io/Dens3R/) [[Code]](https://github.com/alibaba/Taobao3D/tree/Dens3R)
-- MoRE: 3D Visual Geometry Reconstruction Meets Mixture-of-Experts. [[Paper]](https://arxiv.org/abs/2510.27234) [[Project Page]](https://g-1nonly.github.io/MoRE_Website/)
+## Research workflow
 
-🙎 **3D Human / Avatar Modeling and Animation**
-- TaoAvatar: Real-Time Lifelike Full-Body Talking Avatars for Augmented Reality via 3D Gaussian Splatting (**CVPR 2025 Hightlight**). [[Paper]](https://arxiv.org/abs/2503.17032) [[Project Page]](https://pixelai-team.github.io/TaoAvatar/) [[Demo Code]](https://github.com/alibaba/MNN/blob/master/apps/Android/MnnTaoAvatar/README.md)
-- HRM2Avatar: High-Fidelity Real-Time Mobile Avatars from Monocular Phone Scans (**SIGGRAPH Asia 2025**). [[Paper]](https://arxiv.org/pdf/2510.13587) [[Project Page]](https://acennr-engine.github.io/HRM2Avatar/) [[Code]](https://github.com/alibaba/Taobao3D/tree/HRM2Avatar)
+```mermaid
+flowchart LR
+    V[Signing video] --> F[Frames and segmentation masks]
+    F --> T[EHM body and FLAME face tracking]
+    T --> P[SMPL-X overlay inspection]
+    P --> A[Avatar replay research]
+    A --> D[Candidate synthetic training data]
+```
 
+The final two stages describe the research direction. This README does not claim a completed recognition benchmark or a measured downstream accuracy gain.
 
-# Join Us
-We are expanding our team and looking for talents passionate about 3D vision, graphics, and AI.
-- 3D Research Intern [[link]](https://talent.taotian.com/campus/position-detail?lang=zh&positionId=2020503)
-- LLM Algorithm Engineer [[link]](https://talent.taotian.com/off-campus/position-detail?lang=zh&positionId=7000043123)
+## My contribution
+
+I worked on adapting custom signing videos to the EHM tracking workflow: preparing per-frame images and segmentation masks, extracting body and facial tracking parameters, and producing SMPL-X overlay previews to inspect body and hand alignment frame by frame.
+
+| Work | Ability demonstrated |
+| --- | --- |
+| Preparing video, frame and mask inputs | Building consistent data interfaces between vision components |
+| Working with EHM and FLAME parameter outputs | Understanding body/face representation formats and preprocessing requirements |
+| Inspecting SMPL-X overlays | Visual diagnosis of tracking quality, especially hands and body alignment |
+| Connecting tracking outputs to avatar research | Reading research code and identifying interfaces between separate systems |
+
+## What is available here
+
+- [HRM2Avatar implementation and setup](HRM2Avatar/README.md): the upstream avatar/rendering foundation relevant to this research.
+- [Dens3R](Dens3R/README.md): a separate upstream reconstruction project distributed in Taobao3D.
+- This project overview and the preserved [upstream introduction](UPSTREAM.md).
+
+The default branch currently contains the upstream foundation. Project-specific EHM preprocessing scripts, signing-video datasets and generated tracking outputs are not included in this public snapshot. The contribution description documents the research work; it is not a claim that cloning this repository alone reproduces the full signing-video pipeline.
+
+## Getting started
+
+```bash
+git clone https://github.com/yf2685-beep/sign-language-avatar-augmentation.git
+cd sign-language-avatar-augmentation
+```
+
+Continue with the [HRM2Avatar instructions](HRM2Avatar/README.md) for supported platforms, dependencies, assets and rendering steps. Follow the upstream requirements for model/data access.
+
+## Interview discussion points
+
+- Why hand alignment deserves separate inspection in a signing workflow.
+- How frame extraction, masks and coordinate conventions affect downstream tracking.
+- How to distinguish a visually plausible overlay from evidence of useful training data.
+- What additional evaluation would be needed before claiming better sign-language recognition.
+
+## Attribution
+
+Taobao3D and HRM2Avatar are upstream research projects by their respective authors. Preserve their licenses, citations and attribution when using the code or assets; see [UPSTREAM.md](UPSTREAM.md) and the component documentation.
